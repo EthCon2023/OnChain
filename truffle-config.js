@@ -15,7 +15,7 @@ module.exports = {
         );
       },
       network_id: "59140",
-      gasPrice: 470000000000,
+      gasPrice: 10000000000,
     },
     development: {
       host: '127.0.0.1',
@@ -44,6 +44,12 @@ module.exports = {
     solc: {
       version: "0.8.19"
     }
+  },
+  settings: {          // See the solidity docs for advice about optimization and evmVersion
+    optimizer: {
+      enabled: true,
+      runs: 200
+    },
   },
   plugins: [
     'truffle-plugin-verify'
