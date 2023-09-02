@@ -1,4 +1,4 @@
-const Token = artifacts.require("ERC20Basic");
+const Token = artifacts.require("HelloWorld");
 
 module.exports = function (deployer) {
   deployer.deploy(Token);

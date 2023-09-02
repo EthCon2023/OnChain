@@ -15,10 +15,11 @@ module.exports = {
         );
       },
       network_id: "59140",
+      gasPrice: 470000000000,
     },
     development: {
       host: '127.0.0.1',
-      port: 7545,
+      port: 8545,
       network_id: '*'
     },
     goerli: {
@@ -41,7 +42,7 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: "^0.8.17"
+      version: "0.8.19"
     }
   },
   plugins: [
