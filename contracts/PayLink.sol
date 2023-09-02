@@ -1,19 +1,20 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import { AxelarExecutable } from './imports/AxelarExecutable.sol';
+import { AxelarExecutable } from '@axelar-network/axelar-gmp-sdk-solidity/contracts/executable/AxelarExecutable.sol';
+import { IAxelarGateway } from '@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGateway.sol';
 
 contract PayLink {
 
     mapping(bytes32 => uint256 amount) LinkToAmount; 
 
-    constructor()  {}
+    constructor() {}
 
     receive() external payable{
 
     }
-
-    function deposit(bytes32 link) payable public {
+    
+    function deposit(bytes32 link) payable public {  // on one chain
         //require(msg.value == amount); do I need?
         LinkToAmount[link] = msg.value;
     }
