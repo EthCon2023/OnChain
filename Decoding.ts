@@ -1,4 +1,4 @@
-const toBytes = (text: string): number[] => {
+export const toBytes = (text: string): number[] => {
     const buffer = Buffer.from(text, 'utf8');
     const result = Array(buffer.length);
     for (let i = 0; i < buffer.length; ++i) {
@@ -8,7 +8,7 @@ const toBytes = (text: string): number[] => {
 };
 
 
-const toText = (bytes: number[]): string => {
+export const toText = (bytes: number[]): string => {
     let result = '';
     for (let i = 0; i < bytes.length; ++i) {
         const byte = bytes[i];
