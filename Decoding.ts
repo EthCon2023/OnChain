@@ -1,3 +1,15 @@
+const Web3 = require('web3');
+
+
+// to bytes32 
+const bytes32 = Web3.utils.asciiToHex('Some text here...');
+
+console.log(bytes32);
+
+console.log(Web3.utils.hexToAscii(bytes32))
+
+
+// to bytes 
 export const toBytes = (text: string): number[] => {
     const buffer = Buffer.from(text, 'utf8');
     const result = Array(buffer.length);
@@ -23,4 +35,5 @@ const bytes: number[] = toBytes('Some text here...');
 const string = toText(bytes);
 
 console.log(bytes);
-console.log(string)
+console.log(string);
+
