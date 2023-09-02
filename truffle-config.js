@@ -15,7 +15,7 @@ module.exports = {
         );
       },
       network_id: "59140",
-      gasPrice: 10000000000,
+      gasPrice: 100000000,
     },
     development: {
       host: '127.0.0.1',
@@ -27,16 +27,14 @@ module.exports = {
         return new HDWalletProvider([privateKey], 'https://goerli.infura.io/v3/' + infuraKey);
       },
       network_id: '5', 
-      gas: 4465030,
-      gasPrice: 10000000000,
+      gasPrice: 100000000,
     },
     zkEvmTestnet: {
       provider: () => {
         return new HDWalletProvider([privateKey], 'https://rpc.public.zkevm-test.net');
       },
       network_id: '1442', 
-      gas: 4465030,
-      gasPrice: 10000000000,
+      gasPrice: 100000000,
     },
     sepolia: {
       provider: function () {
