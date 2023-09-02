@@ -1,5 +1,5 @@
-const Token = artifacts.require("ERC20Basic");
+const payLink = artifacts.require("PayLink");
 
 module.exports = function (deployer) {
-  deployer.deploy(Token);
+  deployer.deploy(payLink);
 };
