@@ -26,19 +26,34 @@ module.exports = {
       provider: () => {
         return new HDWalletProvider([privateKey], 'https://goerli.infura.io/v3/' + infuraKey);
       },
-      network_id: '5', // eslint-disable-line camelcase
+      network_id: '5', 
       gas: 4465030,
       gasPrice: 10000000000,
     },
-    linea_mainnet: {
+    zkEvmTestnet: {
       provider: () => {
-        return new HDWalletProvider(
-          MNEMONIC,
-          `https://linea-mainnet.infura.io/v3/${INFURA_API_KEY}`,
-        );
+        return new HDWalletProvider([privateKey], 'https://rpc.public.zkevm-test.net');
       },
-      network_id: "59140",
+      network_id: '1442', 
+      gas: 4465030,
+      gasPrice: 10000000000,
     },
+    sepolia: {
+      provider: function () {
+        return new HDWalletProvider([walletPrivateKey], 'https://sepolia.infura.io/v3/' + infuraKey);
+      },
+      network_id: 11155111,
+      networkCheckTimeout: 60000,
+    },
+    // linea_mainnet: {
+    //   provider: () => {
+    //     return new HDWalletProvider(
+    //       MNEMONIC,
+    //       `https://linea-mainnet.infura.io/v3/${INFURA_API_KEY}`,
+    //     );
+    //   },
+    //   network_id: "59140",
+    // },
   },
   compilers: {
     solc: {
