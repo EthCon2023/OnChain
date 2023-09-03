@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { config as loadEnv } from 'dotenv';
 import { promises } from "fs";
-import { Uint } from "web3";
 const fsPromises = promises;
 loadEnv();
 
@@ -30,7 +29,7 @@ const getContract = async function () {
 
 
 
-export async function sendTokens(destinationChain: string, destinationAddress: string, link: string, amount: bigint) {
+export async function sendTokens(destinationChain: string, destinationAddress: string, link: string, amount: any) {
     const my_contract = await getContract();
     const send_tx = await my_contract.sendTokens(destinationChain, destinationAddress, link, amount);  // second argumnent is id
     return send_tx;

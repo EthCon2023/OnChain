@@ -11,3 +11,6 @@ https://goerli.etherscan.io/address/0xd19230FF206A07A7C329f82F274290b1d9DcD7AC
 https://explorer.goerli.linea.build/address/0xcE8Ea6216395a87f6F5433A9f97eB8E0257D68Fd
 ### zkEvm_Testnet
 https://testnet-zkevm.polygonscan.com/address/0xAa087a1e4D2089558EB7d82CE6FF7A9a21f84fFe
+
+### Taiko_Testnet
+https://explorer.test.taiko.xyz/address/0x3769cc9680d98EcF13D6a153Dd612F5Ac87B1379
