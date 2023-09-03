@@ -6,12 +6,13 @@ const fsPromises = promises;
 loadEnv();
 
 const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY!!;
-const POLYGON_CONTRACT_ADDRESS = "0x39B45E1147f0A19F9D2979a1CBa2e8660fB34408";
+const INFURA_API_KEY = process.env.INFURA_API_KEY;
+const POLYGON_CONTRACT_ADDRESS = "0xAa087a1e4D2089558EB7d82CE6FF7A9a21f84fFe"; // zkEvmTestnet
 const my_address = "0x6f9e2777D267FAe69b0C5A24a402D14DA1fBcaA1";
-const GOERLI_CONTRACT_ADDRESS = "0xb2d1BAa5fD0Ba77a6060D2D494a82EC025dA82EF";
-const UPDATED_ABI_FILE_PATH = '../build/contracts/PayLinkInterchain.json';
+const GOERLI_CONTRACT_ADDRESS = "0xd19230FF206A07A7C329f82F274290b1d9DcD7AC";
+const UPDATED_ABI_FILE_PATH = './build/contracts/PayLinkInterchain.json';
 
-const provider = ethers.getDefaultProvider(``);
+const provider = ethers.getDefaultProvider(`https://goerli.infura.io/v3/`+ INFURA_API_KEY);  // goerli 
 const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
 async function getAbi(){
@@ -21,20 +22,22 @@ async function getAbi(){
     return abi;
 }
 
-    
 const getContract = async function () {
     const abi = await getAbi();
-    const my_contract = new ethers.Contract(GOERLI_CONTRACT_ADDRESS, abi, signer);
+    const my_contract = await new ethers.Contract(GOERLI_CONTRACT_ADDRESS, abi, signer);
     return my_contract;
 }
 
-const my_contract = await getContract();
 
-export async function sendTokens(destinationChain: string ,destinationAddress: string, link: string, amount: Uint) {
+
+export async function sendTokens(destinationChain: string, destinationAddress: string, link: string, amount: bigint) {
+    const my_contract = await getContract();
     const send_tx = await my_contract.sendTokens(destinationChain, destinationAddress, link, amount);  // second argumnent is id
     return send_tx;
 }
 
+
+sendTokens("polygon-zkevm", POLYGON_CONTRACT_ADDRESS, "hi", 10n )
 
 
 
