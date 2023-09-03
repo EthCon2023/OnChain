@@ -8,7 +8,7 @@ import { IAxelarGasService } from '@axelar-network/axelar-gmp-sdk-solidity/contr
 
 contract PayLinkInterchain is AxelarExecutable{
     IAxelarGasService public immutable gasService;
-
+    address tokenAddress;
     mapping(bytes32 => uint256 amount) private LinkToAmount; 
 
     constructor(address gateway_, address gasReceiver_) AxelarExecutable(gateway_) {
@@ -19,7 +19,7 @@ contract PayLinkInterchain is AxelarExecutable{
 
     }
 
-    function deposit(bytes32 link) payable public {
+    function deposit(bytes32 link) payable public { // deposits ETH for onechain
         //require(msg.value == amount); do I need?
         LinkToAmount[link] = msg.value;
     }
@@ -28,11 +28,11 @@ contract PayLinkInterchain is AxelarExecutable{
         string memory destinationChain,
         string memory destinationAddress,
         bytes32 link,
-        string memory symbol,
         uint256 amount
     ) external payable {
         require(msg.value > 0, 'Gas payment is required');
 
+        string memory symbol = "WETH";
         address tokenAddress = gateway.tokenAddresses(symbol);
         IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
         IERC20(tokenAddress).approve(address(gateway), amount);
@@ -49,13 +49,11 @@ contract PayLinkInterchain is AxelarExecutable{
         gateway.callContractWithToken(destinationChain, destinationAddress, payload, symbol, amount);
     }
 
-    function withdraw(bytes32 link) public returns(bytes memory){
-        require(LinkToAmount[link] > 0);
+    function withdrawTokens(bytes32 link) public returns(bytes memory){
+        require(LinkToAmount[link] > 0, "Wrong Link");
         uint256 _amount = LinkToAmount[link];
         address _to = payable(msg.sender);
-        (bool sent, bytes memory data) = _to.call{value: _amount}("");
-        require(sent, "Failed to send Ether");
-        return data;
+        IERC20(tokenAddress).transferFrom(address(this), msg.sender, _amount);
     }
 
     function _executeWithToken(
@@ -66,9 +64,9 @@ contract PayLinkInterchain is AxelarExecutable{
         uint256 amount
     ) internal override {
         bytes32 link = abi.decode(payload, (bytes32));
-        address tokenAddress = gateway.tokenAddresses(tokenSymbol);
-
+        if (tokenAddress == address(0)){
+            address tokenAddress = gateway.tokenAddresses(tokenSymbol);
+        }
         LinkToAmount[link]= amount;
-
     }
 }
