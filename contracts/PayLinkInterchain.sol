@@ -9,7 +9,7 @@ import { IAxelarGasService } from '@axelar-network/axelar-gmp-sdk-solidity/contr
 contract PayLinkInterchain is AxelarExecutable{
     IAxelarGasService public immutable gasService;
     address tokenAddress;
-    mapping(bytes32 => uint256 amount) private LinkToAmount; 
+    mapping(string => uint256 amount) private LinkToAmount; 
 
     constructor(address gateway_, address gasReceiver_) AxelarExecutable(gateway_) {
         gasService = IAxelarGasService(gasReceiver_);
@@ -19,7 +19,7 @@ contract PayLinkInterchain is AxelarExecutable{
 
     }
 
-    function deposit(bytes32 link) payable public { // deposits ETH for onechain
+    function deposit(string memory link) payable public { // deposits ETH for onechain
         //require(msg.value == amount); do I need?
         LinkToAmount[link] = msg.value;
     }
@@ -27,7 +27,7 @@ contract PayLinkInterchain is AxelarExecutable{
     function sendTokens(
         string memory destinationChain,
         string memory destinationAddress,
-        bytes32 link,
+        string memory link,
         uint256 amount
     ) external payable {
         require(msg.value > 0, 'Gas payment is required');
@@ -49,11 +49,11 @@ contract PayLinkInterchain is AxelarExecutable{
         gateway.callContractWithToken(destinationChain, destinationAddress, payload, symbol, amount);
     }
 
-    function withdrawTokens(bytes32 link) public returns(bytes memory){
+    function withdrawTokens(string memory link) public {
         require(LinkToAmount[link] > 0, "Wrong Link");
         uint256 _amount = LinkToAmount[link];
         address _to = payable(msg.sender);
-        IERC20(tokenAddress).transferFrom(address(this), msg.sender, _amount);
+        IERC20(tokenAddress).transferFrom(address(this), _to, _amount);
     }
 
     function _executeWithToken(
@@ -63,7 +63,7 @@ contract PayLinkInterchain is AxelarExecutable{
         string calldata tokenSymbol,
         uint256 amount
     ) internal override {
-        bytes32 link = abi.decode(payload, (bytes32));
+        string memory link = abi.decode(payload, (string));
         if (tokenAddress == address(0)){
             address tokenAddress = gateway.tokenAddresses(tokenSymbol);
         }
