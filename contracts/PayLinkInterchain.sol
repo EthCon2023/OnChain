@@ -9,6 +9,7 @@ import { IAxelarGasService } from '@axelar-network/axelar-gmp-sdk-solidity/contr
 contract PayLinkInterchain is AxelarExecutable{
     IAxelarGasService public immutable gasService;
     address tokenAddress;
+    string public message;
     mapping(string => uint256 amount) private LinkToAmount; 
 
     constructor(address gateway_, address gasReceiver_) AxelarExecutable(gateway_) {
@@ -38,7 +39,7 @@ contract PayLinkInterchain is AxelarExecutable{
         IERC20(tokenAddress).approve(address(gateway), amount);
         bytes memory payload = abi.encode(link);
         gasService.payNativeGasForContractCallWithToken{ value: msg.value }(
-            address(this),
+            msg.sender,
             destinationChain,
             destinationAddress,
             payload,
@@ -47,6 +48,33 @@ contract PayLinkInterchain is AxelarExecutable{
             msg.sender
         );
         gateway.callContractWithToken(destinationChain, destinationAddress, payload, symbol, amount);
+    }
+
+    function callContract(
+        string calldata destinationChain,
+        string calldata destinationAddress,
+        string calldata inMessage
+    ) external payable{
+        require(msg.value > 0, 'Gas payment is required');
+
+        bytes memory payload = abi.encode(inMessage);
+        gasService.payNativeGasForContractCall{ value: msg.value }(
+            msg.sender,
+            destinationChain,
+            destinationAddress,
+            payload,
+            msg.sender
+        );
+        gateway.callContract(destinationChain, destinationAddress, payload);
+    }
+
+    // Handles calls created by setAndSend. Updates this contract's value
+    function _execute(
+        string calldata sourceChain_,
+        string calldata sourceAddress_,
+        bytes calldata payload_
+    ) internal override {
+        (message) = abi.decode(payload_, (string));
     }
 
     function withdrawTokens(string memory link) public {
