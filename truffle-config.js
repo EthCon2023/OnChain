@@ -37,13 +37,6 @@ module.exports = {
       network_id: '1442', 
       gasPrice: 100000000,
     },
-    taikoTestnet: {
-      provider: () => {
-        return new HDWalletProvider([privateKey], 'https://rpc.test.taiko.xyz');
-      },
-      network_id: '167005', 
-      gasPrice: 100000000,
-    },
     sepolia: {
       provider: function () {
         return new HDWalletProvider([walletPrivateKey], 'https://sepolia.infura.io/v3/' + infuraKey);
