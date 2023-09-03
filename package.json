@@ -4,6 +4,8 @@
     "@openzeppelin/contracts": "^4.9.2",
     "babel-register": "^6.26.0",
     "dotenv": "^16.3.1",
+    "ethers": "^6.7.1",
+    "ethersjs": "^0.0.1-security",
     "ganache": "^7.9.1",
     "ganache-cli": "^6.12.2",
     "truffle-plugin-verify": "^0.6.5",
